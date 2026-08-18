@@ -1,0 +1,91 @@
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
+import { siteData } from "../data/siteData";
+
+const navLinks = [
+  { label: "About", href: "#about" },
+  { label: "Nights", href: "#nights" },
+  { label: "Mixes", href: "#mixes" },
+  { label: "Services", href: "#services" },
+  { label: "Events", href: "#events" },
+  { label: "Gallery", href: "#gallery" },
+  { label: "Book", href: "#book" },
+];
+
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
+
+  return (
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "glass shadow-lg" : "bg-transparent"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="#" className="font-display text-xl sm:text-2xl font-bold gradient-text">
+          {siteData.djName}
+        </a>
+
+        <div className="hidden lg:flex items-center gap-6">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-sm text-gray-300 hover:text-orange-400 transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
+          <a
+            href="#book"
+            className="px-5 py-2 rounded-full btn-primary text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+          >
+            Book Now
+          </a>
+        </div>
+
+        <button
+          className="lg:hidden text-white p-1"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle menu"
+        >
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {mobileOpen && (
+        <div className="lg:hidden fixed inset-0 top-[65px] glass border-t border-white/5 px-6 py-6 space-y-1 overflow-y-auto">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="block py-3 text-gray-300 hover:text-orange-400 transition-colors text-lg border-b border-white/5"
+              onClick={() => setMobileOpen(false)}
+            >
+              {link.label}
+            </a>
+          ))}
+          <a
+            href="#book"
+            className="block text-center mt-6 px-5 py-3 rounded-full btn-primary text-white font-semibold"
+            onClick={() => setMobileOpen(false)}
+          >
+            Book Now
+          </a>
+        </div>
+      )}
+    </nav>
+  );
+}
