@@ -63,13 +63,35 @@ booking: {
 },
 ```
 
-## Live site
+## Live site (Vercel)
 
-Pushing to `main` on GitHub automatically deploys via GitHub Pages:
+Deploy this repo to Vercel and use any available project name, for example:
 
-**https://YOUR_GITHUB_USERNAME.github.io/dj-artist-website/**
+**https://dj-anil-beats.vercel.app**
 
-Replace `YOUR_GITHUB_USERNAME` with the GitHub account that owns the repo.
+Vercel will auto-build the app from your GitHub repository.
+
+## Live content editing (frontend admin)
+
+This project now supports editing live website data directly from the frontend.
+
+1. Open your live site with `?admin=1` in the URL:
+   - `https://YOUR-PROJECT.vercel.app/?admin=1`
+2. Click **Admin Edit**
+3. Update the JSON and save
+
+### Required Vercel environment variables
+
+- `BLOB_READ_WRITE_TOKEN` (from Vercel Blob)
+- `ADMIN_PASSWORD_HASH` (SHA-256 hash hex of your admin password)
+
+To generate a password hash on macOS:
+
+```bash
+echo -n "your-strong-password" | shasum -a 256
+```
+
+Copy the 64-character hex output into `ADMIN_PASSWORD_HASH`.
 
 ## Project Structure
 
@@ -100,4 +122,4 @@ src/
 - React + Vite
 - Tailwind CSS v4
 - Lucide React icons
-- No backend required (static site)
+- Vercel Functions + Vercel Blob for live content editing
